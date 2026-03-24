@@ -1,4 +1,41 @@
-{% extends "base.html" %}
-{% block content %}
-<h1>Bienvenido a la página de inicio 😺</h1>
+{% extends 'base.html' %} 
+{%block content%}
+
+
+<div class="container py-5">
+    {%if user.is_authenticated%}<!-- primero condicionamos-->
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-body">
+          <h3 class="text-center md-4">Bienvenidos a este CRM 👩🏻‍🤝‍🧑🏻</h3>
+          {%else%}<!-- colocmanos un sino-->
+          <h1 class="text-center md-4">Ingrese al Sistema</h1><!-- colocmanos h1-->
+          <form method="POST" action="{% url 'home'%}"><!-- configuracion de form-->
+            {% csrf_token %}<!-- token para login se a correcto validar-->
+            <div class="mb-3">
+              <label for="form-control" class="form-label"
+                >Usuario</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                name="username" placerholder="Username" required/>
+                </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label" >Password</label >
+              <input type="password" class="form-control" name="password" placerholder="Password" required/>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{%endif%}<!---->
 {% endblock %}
+
+
