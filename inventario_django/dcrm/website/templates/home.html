@@ -1,41 +1,125 @@
 {% extends 'base.html' %} 
 {%block content%}
 
-
 <div class="container py-5">
-    {%if user.is_authenticated%}<!-- primero condicionamos-->
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card shadow">
-        <div class="card-body">
-          <h3 class="text-center md-4">Bienvenidos a este CRM 👩🏻‍🤝‍🧑🏻</h3>
-          {%else%}<!-- colocmanos un sino-->
-          <h1 class="text-center md-4">Ingrese al Sistema</h1><!-- colocmanos h1-->
-          <form method="POST" action="{% url 'home'%}"><!-- configuracion de form-->
-            {% csrf_token %}<!-- token para login se a correcto validar-->
-            <div class="mb-3">
-              <label for="form-control" class="form-label"
-                >Usuario</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                name="username" placerholder="Username" required/>
+    {%if user.is_authenticated%}
+    <!-- PANTALLA DE BIENVENIDA PARA USUARIOS AUTENTICADOS -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card welcome-card position-relative float-animation">
+                <div class="decoration-dots decoration-dots-1"></div>
+                <div class="decoration-dots decoration-dots-2"></div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <h1 style="font-size: 3rem; background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">CRM Dashboard</h1>
+                    </div>
+                    <h3>Bienvenido/a, {{ user.first_name|default:user.username }}</h3>
+                    <p class="text-muted mt-3 fs-5">
+                        Has iniciado sesión exitosamente en tu Panel de CRM
+                    </p>
+                    <hr class="my-4" style="border-color: var(--primary-rose);">
+                    <div class="row mt-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3 rounded-4" style="background: linear-gradient(135deg, rgba(255,107,157,0.1), rgba(201,167,235,0.1));">
+                                <h6 class="mt-2 mb-1" style="color: var(--primary-purple);">Dashboard</h6>
+                                <small class="text-muted">Gestiona tu información</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3 rounded-4" style="background: linear-gradient(135deg, rgba(255,107,157,0.1), rgba(201,167,235,0.1));">
+                                <h6 class="mt-2 mb-1" style="color: var(--primary-purple);">Clientes</h6>
+                                <small class="text-muted">Administra clientes</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3 rounded-4" style="background: linear-gradient(135deg, rgba(255,107,157,0.1), rgba(201,167,235,0.1));">
+                                <h6 class="mt-2 mb-1" style="color: var(--primary-purple);">Configuración</h6>
+                                <small class="text-muted">Personaliza tu cuenta</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <a href="#" class="btn btn-login">
+                            Ir al Dashboard
+                        </a>
+                    </div>
                 </div>
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label" >Password</label >
-              <input type="password" class="form-control" name="password" placerholder="Password" required/>
             </div>
-
-
-            <button type="submit" class="btn btn-primary">Login</button>
-          </form>
         </div>
-      </div>
     </div>
-  </div>
+
+    {%else%}
+    <!-- PANTALLA DE LOGIN -->
+    <div class="row justify-content-center align-items-center min-vh-75">
+        <div class="col-lg-5 col-md-7">
+            <div class="login-card position-relative">
+                <div class="decoration-dots decoration-dots-1"></div>
+                <div class="decoration-dots decoration-dots-2"></div>
+                
+                <div class="card-header">
+                    <h3>Iniciar Sesión</h3>
+                    <p class="mb-0 mt-2 opacity-75">Accede a tu cuenta de CRM</p>
+                </div>
+                
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                    
+                    <form class="login-form" method="POST" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="username" class="form-label">Usuario</label>
+                            <input type="text" name="username" class="form-control form-control-lg" id="username" placeholder="Ingresa tu usuario" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" name="password" class="form-control form-control-lg" id="password" placeholder="Ingresa tu contraseña" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="form-check d-flex justify-content-between align-items-center">
+                                <div>
+                                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                                    <label class="form-check-label" for="rememberMe">
+                                        Recordarme
+                                    </label>
+                                </div>
+                                <a href="#" class="small">¿Olvidaste tu contraseña?</a>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-login">
+                                Iniciar Sesión
+                            </button>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <p class="text-muted mb-0">
+                                ¿No tienes cuenta? 
+                                <a href="{% url 'registro' %}">Regístrate aquí</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <small class="text-muted">
+                    Sistema CRM - Gestión de Relaciones con Clientes
+                </small>
+            </div>
+        </div>
+    </div>
+    {%endif%}
 </div>
-{%endif%}<!---->
+
 {% endblock %}
-
-

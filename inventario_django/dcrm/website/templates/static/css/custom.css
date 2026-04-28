@@ -1,0 +1,458 @@
+/* ========================================
+   🎀 DASHBOARD LILI - ESTILO CUTE PROFESIONAL 🎀
+   ======================================== */
+
+/* === VARIABLES DE COLORES === */
+:root {
+    --primary-pink: #FF6B9D;
+    --primary-lavender: #C9A7EB;
+    --primary-purple: #9B72CF;
+    --primary-rose: #FFB6C1;
+    --accent-gold: #FFD700;
+    --accent-coral: #FF7F7F;
+    --bg-gradient-start: #FFF0F5;
+    --bg-gradient-end: #F0E6FA;
+    --card-bg: #FFFFFF;
+    --text-dark: #4A3F55;
+    --text-light: #7A6B8A;
+    --shadow-pink: rgba(255, 107, 157, 0.3);
+    --shadow-lavender: rgba(201, 167, 235, 0.3);
+}
+
+/* === ESTILOS GLOBALES === */
+body {
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-dark);
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(255, 107, 157, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(201, 167, 235, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(155, 114, 207, 0.05) 0%, transparent 30%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* === NAVBAR PERSONALIZADO === */
+.navbar-lili {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-pink) 100%);
+    box-shadow: 0 4px 20px var(--shadow-pink);
+    padding: 0.8rem 1rem;
+    border-bottom: 3px solid var(--accent-gold);
+}
+
+.navbar-lili .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-lili .navbar-brand:hover {
+    color: var(--accent-gold);
+    transform: scale(1.05);
+}
+
+.navbar-lili .navbar-brand::before {
+    content: '🌸';
+    font-size: 1.8rem;
+}
+
+.navbar-lili .nav-link {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.navbar-lili .nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: var(--accent-gold);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.navbar-lili .nav-link:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.navbar-lili .nav-link:hover::before {
+    width: 80%;
+}
+
+.navbar-lili .nav-link.active {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.navbar-lili .nav-link.active::before {
+    width: 100%;
+}
+
+.navbar-lili .navbar-toggler {
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    padding: 0.4rem 0.6rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-lili .navbar-toggler:hover {
+    border-color: var(--accent-gold);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-lili .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-lili .btn-nav {
+    background: linear-gradient(135deg, var(--accent-gold) 0%, #FFA500 100%);
+    color: var(--text-dark);
+    font-weight: 600;
+    border: none;
+    border-radius: 25px;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.navbar-lili .btn-nav:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+    background: linear-gradient(135deg, #FFA500 0%, var(--accent-gold) 100%);
+}
+
+/* === CARD DE LOGIN === */
+.login-card {
+    background: var(--card-bg);
+    border-radius: 24px;
+    box-shadow: 
+        0 20px 60px var(--shadow-pink),
+        0 10px 30px var(--shadow-lavender);
+    overflow: hidden;
+    border: none;
+    position: relative;
+}
+
+.login-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary-pink), var(--primary-lavender), var(--accent-gold), var(--primary-coral));
+}
+
+.login-card .card-header {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-pink) 100%);
+    color: white;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-card .card-header::before {
+    content: '✨';
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 1.5rem;
+    animation: sparkle 2s infinite;
+}
+
+.login-card .card-header::after {
+    content: '✨';
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 1.5rem;
+    animation: sparkle 2s infinite 0.5s;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.login-card .card-header h3 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.login-card .card-body {
+    padding: 2.5rem 2rem;
+}
+
+/* === FORMULARIO DE LOGIN === */
+.login-form .form-label {
+    color: var(--text-dark);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.login-form .form-control {
+    border: 2px solid #E8E0F0;
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #FAFAFA;
+}
+
+.login-form .form-control:focus {
+    border-color: var(--primary-pink);
+    box-shadow: 0 0 0 4px var(--shadow-pink);
+    background: #FFFFFF;
+    transform: scale(1.02);
+}
+
+.login-form .form-control::placeholder {
+    color: var(--text-light);
+    opacity: 0.7;
+}
+
+.login-form .input-group {
+    position: relative;
+}
+
+.login-form .input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    color: var(--primary-purple);
+    font-size: 1.2rem;
+}
+
+.login-form .form-control-with-icon {
+    padding-left: 45px;
+}
+
+/* === CHECKBOX PERSONALIZADO === */
+.login-form .form-check-input {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid var(--primary-lavender);
+    transition: all 0.3s ease;
+}
+
+.login-form .form-check-input:checked {
+    background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+    border-color: var(--primary-pink);
+    box-shadow: 0 0 10px var(--shadow-pink);
+}
+
+.login-form .form-check-input:focus {
+    box-shadow: 0 0 0 4px var(--shadow-lavender);
+}
+
+.login-form .form-check-label {
+    color: var(--text-light);
+    font-weight: 500;
+    user-select: none;
+}
+
+/* === BOTÓN DE LOGIN === */
+.btn-login {
+    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-purple) 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0.9rem 2rem;
+    border: none;
+    border-radius: 50px;
+    width: 100%;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px var(--shadow-pink);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-login:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px var(--shadow-pink);
+    color: white;
+}
+
+.btn-login:hover::before {
+    left: 100%;
+}
+
+.btn-login:active {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px var(--shadow-pink);
+}
+
+/* === CARD DE BIENVENIDA === */
+.welcome-card {
+    background: linear-gradient(135deg, var(--card-bg) 0%, #FFF8FA 100%);
+    border-radius: 24px;
+    box-shadow: 
+        0 20px 60px var(--shadow-pink),
+        0 10px 30px var(--shadow-lavender);
+    border: none;
+    overflow: hidden;
+}
+
+.welcome-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary-pink), var(--primary-lavender), var(--accent-gold));
+}
+
+.welcome-card .card-body {
+    padding: 3rem 2rem;
+}
+
+.welcome-card h3 {
+    background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* === ANIMACIONES === */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.float-animation {
+    animation: float 3s ease-in-out infinite;
+}
+
+.gradient-animation {
+    background-size: 200% 200%;
+    animation: gradient 5s ease infinite;
+}
+
+/* === DECORACIONES === */
+.decoration-dots {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-rose), var(--primary-lavender));
+    opacity: 0.1;
+}
+
+.decoration-dots-1 {
+    top: -30px;
+    right: -30px;
+}
+
+.decoration-dots-2 {
+    bottom: -30px;
+    left: -30px;
+    width: 80px;
+    height: 80px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .login-card .card-header {
+        padding: 1.5rem 1rem;
+    }
+    
+    .login-card .card-header h3 {
+        font-size: 1.5rem;
+    }
+    
+    .login-card .card-body {
+        padding: 1.5rem 1rem;
+    }
+    
+    .navbar-lili .navbar-brand {
+        font-size: 1.3rem;
+    }
+    
+    .navbar-lili .navbar-brand::before {
+        font-size: 1.5rem;
+    }
+}
+
+/* === HELP TEXT === */
+.login-form .form-text {
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.login-form .form-text a {
+    color: var(--primary-pink);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.login-form .form-text a:hover {
+    color: var(--primary-purple);
+    text-decoration: underline;
+}
+
+/* === EFECTO GLASS === */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}

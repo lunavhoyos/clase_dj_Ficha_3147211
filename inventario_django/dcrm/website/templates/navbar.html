@@ -1,19 +1,62 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-lili sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'home' %}">Django CMR</a>
+    <a class="navbar-brand" href="{% url 'home' %}">Django CRM</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-
         <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+          <a class="nav-link active" aria-current="page" href="{% url 'home' %}">
+            Inicio
+          </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            Servicios
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            Productos
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            Agendas
+          </a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Mas opciones
+          </a>
+          <ul class="dropdown-menu dropdown-menu-light">
+            <li><a class="dropdown-item" href="#">Opcion 1</a></li>
+            <li><a class="dropdown-item" href="#">Opcion 2</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Otra opcion</a></li>
+          </ul>
+        </li>
+        {% endif %}
       </ul>
-
-
+      
+      {% if user.is_authenticated %}
+      <div class="d-flex align-items-center gap-3">
+        <span class="text-white d-none d-lg-inline">
+          Hola, <strong>{{ user.username }}</strong>
+        </span>
+        <a href="{% url 'logout' %}" class="btn btn-nav btn-sm">
+          Cerrar Sesion
+        </a>
+      </div>
+      {% else %}
+      <div class="d-flex gap-2">
+        <a href="{% url 'registro' %}" class="btn btn-nav btn-sm">
+          Registrarse
+        </a>
+      </div>
+      {% endif %}
     </div>
   </div>
 </nav>
