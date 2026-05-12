@@ -59,17 +59,17 @@
                             <div class="form-text">{{ form.username.help_text|safe }}</div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="id_email" class="form-label">Correo Electronico</label>
-                            {{ form.email }}
-                            {% if form.email.errors %}
-                                <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
-                            {% endif %}
-                        </div>
-                        
-                        <hr class="my-4" style="border-color: var(--primary-rose);">
-                        
-                        <h5 class="mb-3" style="color: var(--primary-purple);">Informacion Adicional (Opcional)</h5>
+                         <div class="mb-3">
+                             <label for="id_email" class="form-label">Correo Electronico</label>
+                             {{ form.email }}
+                             {% if form.email.errors %}
+                                 <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+                             {% endif %}
+                         </div>
+                         
+                         <hr class="my-4" style="border-color: var(--accent-color);">
+                         
+                         <h5 class="mb-3" style="color: var(--primary-color);">Informacion Adicional (Opcional)</h5>
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -83,14 +83,14 @@
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="id_direccion" class="form-label">Direccion</label>
-                            {{ form.direccion }}
-                        </div>
-                        
-                        <hr class="my-4" style="border-color: var(--primary-rose);">
-                        
-                        <h5 class="mb-3" style="color: var(--primary-purple);">Contrasena</h5>
+                         <div class="mb-3">
+                             <label for="id_direccion" class="form-label">Direccion</label>
+                             {{ form.direccion }}
+                         </div>
+                         
+                         <hr class="my-4" style="border-color: var(--accent-color);">
+                         
+                         <h5 class="mb-3" style="color: var(--primary-color);">Contrasena</h5>
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
