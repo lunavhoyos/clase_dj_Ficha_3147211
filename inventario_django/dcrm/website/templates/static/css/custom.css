@@ -1,22 +1,23 @@
 /* ========================================
-   🎀 DASHBOARD LILI - ESTILO CUTE PROFESIONAL 🎀
+   DASHBOARD  - ESTILO
    ======================================== */
 
 /* === VARIABLES DE COLORES === */
 :root {
-    --primary-pink: #FF6B9D;
-    --primary-lavender: #C9A7EB;
-    --primary-purple: #9B72CF;
-    --primary-rose: #FFB6C1;
-    --accent-gold: #FFD700;
-    --accent-coral: #FF7F7F;
-    --bg-gradient-start: #FFF0F5;
-    --bg-gradient-end: #F0E6FA;
+    --primary-color: #4682B4;
+    --secondary-color: #7FB7EC;
+    --accent-color: #9CD2FF;
+    --light-accent: #B8EFFF;
+    --extra-light: #D5FFFF;
+    --almost-white: #F3FFFF;
+    --white: #FFFFFF;
+    --bg-gradient-start: #F0F8FF;
+    --bg-gradient-end: #E6F3FF;
     --card-bg: #FFFFFF;
-    --text-dark: #4A3F55;
-    --text-light: #7A6B8A;
-    --shadow-pink: rgba(255, 107, 157, 0.3);
-    --shadow-lavender: rgba(201, 167, 235, 0.3);
+    --text-dark: #1A365D;
+    --text-light: #4A5568;
+    --shadow-primary: rgba(70, 130, 180, 0.3);
+    --shadow-secondary: rgba(127, 183, 236, 0.3);
 }
 
 /* === ESTILOS GLOBALES === */
@@ -35,19 +36,19 @@ body::before {
     right: 0;
     bottom: 0;
     background-image: 
-        radial-gradient(circle at 20% 80%, rgba(255, 107, 157, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(201, 167, 235, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(155, 114, 207, 0.05) 0%, transparent 30%);
+        radial-gradient(circle at 20% 80%, rgba(70, 130, 180, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(127, 183, 236, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(156, 210, 255, 0.05) 0%, transparent 30%);
     pointer-events: none;
     z-index: -1;
 }
 
 /* === NAVBAR PERSONALIZADO === */
 .navbar-lili {
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-pink) 100%);
-    box-shadow: 0 4px 20px var(--shadow-pink);
+    background: linear-gradient(135deg, var(--light-accent) 0%, var(--primary-color) 100%);
+    box-shadow: 0 4px 20px var(--shadow-primary);
     padding: 0.8rem 1rem;
-    border-bottom: 3px solid var(--accent-gold);
+    border-bottom: 3px solid var(--accent-color);
 }
 
 .navbar-lili .navbar-brand {
@@ -62,7 +63,7 @@ body::before {
 }
 
 .navbar-lili .navbar-brand:hover {
-    color: var(--accent-gold);
+    color: var(--accent-color);
     transform: scale(1.05);
 }
 
@@ -88,7 +89,7 @@ body::before {
     left: 50%;
     width: 0;
     height: 3px;
-    background: var(--accent-gold);
+    background: var(--accent-color);
     transition: all 0.3s ease;
     transform: translateX(-50%);
     border-radius: 2px;
@@ -120,7 +121,7 @@ body::before {
 }
 
 .navbar-lili .navbar-toggler:hover {
-    border-color: var(--accent-gold);
+    border-color: var(--accent-color);
     background: rgba(255, 255, 255, 0.1);
 }
 
@@ -129,7 +130,7 @@ body::before {
 }
 
 .navbar-lili .btn-nav {
-    background: linear-gradient(135deg, var(--accent-gold) 0%, #FFA500 100%);
+    background: linear-gradient(135deg, var(--accent-color) 0%, #FFA500 100%);
     color: var(--text-dark);
     font-weight: 600;
     border: none;
@@ -142,7 +143,7 @@ body::before {
 .navbar-lili .btn-nav:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
-    background: linear-gradient(135deg, #FFA500 0%, var(--accent-gold) 100%);
+    background: linear-gradient(135deg, #FFA500 0%, var(--accent-color) 100%);
 }
 
 /* === CARD DE LOGIN === */
@@ -164,11 +165,11 @@ body::before {
     left: 0;
     right: 0;
     height: 6px;
-    background: linear-gradient(90deg, var(--primary-pink), var(--primary-lavender), var(--accent-gold), var(--primary-coral));
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color), var(--light-accent));
 }
 
 .login-card .card-header {
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-pink) 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color) 100%);
     color: white;
     text-align: center;
     padding: 2rem 1.5rem;
@@ -235,7 +236,7 @@ body::before {
 }
 
 .login-form .form-control:focus {
-    border-color: var(--primary-pink);
+    border-color: var(--primary-color);
     box-shadow: 0 0 0 4px var(--shadow-pink);
     background: #FFFFFF;
     transform: scale(1.02);
@@ -256,7 +257,7 @@ body::before {
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    color: var(--primary-purple);
+    color: var(--primary-color);
     font-size: 1.2rem;
 }
 
@@ -269,13 +270,13 @@ body::before {
     width: 20px;
     height: 20px;
     border-radius: 6px;
-    border: 2px solid var(--primary-lavender);
+    border: 2px solid var(--secondary-color);
     transition: all 0.3s ease;
 }
 
 .login-form .form-check-input:checked {
-    background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
-    border-color: var(--primary-pink);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-color));
+    border-color: var(--primary-color);
     box-shadow: 0 0 10px var(--shadow-pink);
 }
 
@@ -291,7 +292,7 @@ body::before {
 
 /* === BOTÓN DE LOGIN === */
 .btn-login {
-    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-purple) 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color) 100%);
     color: white;
     font-weight: 700;
     font-size: 1.1rem;
@@ -349,7 +350,7 @@ body::before {
     left: 0;
     right: 0;
     height: 6px;
-    background: linear-gradient(90deg, var(--primary-pink), var(--primary-lavender), var(--accent-gold));
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
 }
 
 .welcome-card .card-body {
@@ -357,7 +358,7 @@ body::before {
 }
 
 .welcome-card h3 {
-    background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -393,7 +394,7 @@ body::before {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-rose), var(--primary-lavender));
+    background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
     opacity: 0.1;
 }
 
@@ -439,14 +440,14 @@ body::before {
 }
 
 .login-form .form-text a {
-    color: var(--primary-pink);
+    color: var(--primary-color);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
 .login-form .form-text a:hover {
-    color: var(--primary-purple);
+    color: var(--primary-color);
     text-decoration: underline;
 }
 
