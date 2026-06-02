@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Registro - Django CRM{% endblock %}
+{% block title %}Agregar Registro - Django CRM{% endblock %}
 
 {% block content %}
 
@@ -13,8 +13,8 @@
                 <div class="decoration-dots decoration-dots-2"></div>
                 
                 <div class="card-header">
-                    <h3>Crear Cuenta Nueva</h3>
-                    <p class="mb-0 mt-2 opacity-75">Completa el formulario para registrarte</p>
+                    <h3>Agregar Nuevo Registro</h3>
+                    <p class="mb-0 mt-2 opacity-75">Complete el formulario para agregar un nuevo usuario</p>
                 </div>
                 
                 <div class="card-body">
@@ -59,17 +59,17 @@
                             <div class="form-text">{{ form.username.help_text|safe }}</div>
                         </div>
                         
-                         <div class="mb-3">
-                             <label for="id_email" class="form-label">Correo Electronico</label>
-                             {{ form.email }}
-                             {% if form.email.errors %}
-                                 <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
-                             {% endif %}
-                         </div>
-                         
-                         <hr class="my-4" style="border-color: var(--accent-color);">
-                         
-                         <h5 class="mb-3" style="color: var(--primary-color);">Informacion Adicional (Opcional)</h5>
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label">Correo Electronico</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <hr class="my-4" style="border-color: var(--accent-color);">
+                        
+                        <h5 class="mb-3" style="color: var(--primary-color);">Informacion Adicional (Opcional)</h5>
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -83,14 +83,14 @@
                             </div>
                         </div>
                         
-                         <div class="mb-3">
-                             <label for="id_direccion" class="form-label">Direccion</label>
-                             {{ form.direccion }}
-                         </div>
-                         
-                         <hr class="my-4" style="border-color: var(--accent-color);">
-                         
-                         <h5 class="mb-3" style="color: var(--primary-color);">Contrasena</h5>
+                        <div class="mb-3">
+                            <label for="id_direccion" class="form-label">Direccion</label>
+                            {{ form.direccion }}
+                        </div>
+                        
+                        <hr class="my-4" style="border-color: var(--accent-color);">
+                        
+                        <h5 class="mb-3" style="color: var(--primary-color);">Contrasena</h5>
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -114,14 +114,13 @@
                         
                         <div class="d-grid gap-2 mt-4">
                             <button type="submit" class="btn btn-login">
-                                Crear Cuenta
+                                Agregar Registro
                             </button>
                         </div>
                         
                         <div class="text-center mt-4">
                             <p class="text-muted mb-0">
-                                Ya tienes cuenta? 
-                                <a href="{% url 'home' %}">Inicia sesion aqui</a>
+                                <a href="{% url 'home' %}" class="text-decoration-none">Cancelar</a>
                             </p>
                         </div>
                     </form>

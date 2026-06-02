@@ -1,8 +1,8 @@
 import mysql.connector
 dataBase = mysql.connector.connect(
     host = "localhost",
-    user = "Luna_18",
-    passwd = "15miope2008")
+    user = "root",
+    passwd = "")
  
 # Se crrea un cursor para recorrer las filas y las columnas de la base de datos
 cursorObject = dataBase.cursor()#Se creea un cursor para ejecutar comandos SQL
