@@ -131,3 +131,19 @@ STATICFILES_DIRS =[
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Para el despliegue
+DEBUG = True
+ALLOWED_HOSTS = ['*', #Permitir localhost y dominios de Loca.lt para pruebas locales
+                 'localhost',
+                 '127.0.0.1',
+                 'loca.lt',
+                 ]
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://loca.tl', ]
+
+SECURE_SSL_REDIRECT = True #Redirige todas las solicitudes http a https
+SESSION_COOKIE_SECURE = True #Asegura que las cookies de sesión solo se envíen a través de HTTPS
+CSRF_COOKIE_SECURE = True #Asegura que las cookies CSRF solo se envíen a través de HTTPS
+CSRF_COOKIE_SAMESITE = 'Lax' #Configura la política SameSite para las cookies CSRF
+CSRF_COOKIE_HTTPONLY = True #Evita que las cookies CSRF sean accesibles a través de JavaScript
