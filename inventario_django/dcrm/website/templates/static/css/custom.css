@@ -636,3 +636,43 @@ body::before {
     to { opacity: 1; transform: translateY(0); }
 }
 
+.pagination-sm .page-link {
+    color: var(--primary-color);
+    border: none;
+    background: transparent;
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    border-radius: 12px;
+    transition: all 0.25s ease;
+    position: relative;
+    min-width: 38px;
+    text-align: center;
+}
+.pagination-sm .page-item.active .page-link {
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px var(--shadow-primary);
+    z-index: 2;
+}
+.pagination-sm .page-link:hover {
+    background: var(--almost-white);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+.pagination-sm .page-item.disabled .page-link {
+    color: #cbd5e1;
+    background: transparent;
+    pointer-events: none;
+}
+@media (max-width: 576px) {
+    .pagination-sm .page-link {
+        padding: 0.4rem 0.55rem;
+        min-width: 32px;
+        font-size: 0.85rem;
+    }
+    .pagination-sm {
+        gap: 0.25rem;
+    }
+}
+

@@ -2,17 +2,21 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.paginator import Paginator
 from .forms import RegistroForm
 from .models import Registro
 
 def home(request):
     """Vista principal - muestra el formulario de registro si no está autenticado"""
     if request.user.is_authenticated:
-        # Obtener todos los registros para mostrar en el listado
-        registros = Registro.objects.all().select_related('user')
+        registros_list = Registro.objects.all().select_related('user')
+        paginator = Paginator(registros_list, 10)
+        page_number = request.GET.get('page')
+        registros = paginator.get_page(page_number)
         return render(request, 'home.html', {
             'user': request.user,
-            'registros': registros
+            'registros': registros,
+            'page_obj': registros,
         })
     else:
         return render(request, 'home.html')

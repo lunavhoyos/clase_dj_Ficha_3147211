@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar Registro - Django CRM{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <div class="login-card position-relative">
+                <div class="decoration-dots decoration-dots-1"></div>
+                <div class="decoration-dots decoration-dots-2"></div>
+                
+                <div class="card-header">
+                    <h3>Editar Registro</h3>
+                    <p class="mb-0 mt-2 opacity-75">Modifique los campos que desea actualizar</p>
+                </div>
+                
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="alert-container mb-4">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <form method="POST" class="login-form">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_first_name" class="form-label">Nombre</label>
+                                <input type="text" name="first_name" id="id_first_name" class="form-control" value="{{ user.first_name }}" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="id_last_name" class="form-label">Apellido</label>
+                                <input type="text" name="last_name" id="id_last_name" class="form-control" value="{{ user.last_name }}" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label">Correo Electronico</label>
+                            <input type="email" name="email" id="id_email" class="form-control" value="{{ user.email }}" required>
+                        </div>
+                        
+                        <hr class="my-4" style="border-color: var(--accent-color);">
+                        
+                        <h5 class="mb-3" style="color: var(--primary-color);">Informacion Adicional</h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_telefono" class="form-label">Telefono</label>
+                                <input type="text" name="telefono" id="id_telefono" class="form-control" value="{{ registro.telefono }}">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="id_ciudad" class="form-label">Ciudad</label>
+                                <input type="text" name="ciudad" id="id_ciudad" class="form-control" value="{{ registro.ciudad }}">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_direccion" class="form-label">Direccion</label>
+                            <input type="text" name="direccion" id="id_direccion" class="form-control" value="{{ registro.direccion }}">
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-login">
+                                Guardar Cambios
+                            </button>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <p class="text-muted mb-0">
+                                <a href="{% url 'home' %}" class="text-decoration-none">Cancelar</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <small class="text-muted">
+                    Sistema CRM
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
