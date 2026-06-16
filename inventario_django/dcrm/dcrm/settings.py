@@ -133,17 +133,22 @@ STATICFILES_DIRS =[
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #Para el despliegue
-DEBUG = True
-ALLOWED_HOSTS = ['*', #Permitir localhost y dominios de Loca.lt para pruebas locales
-                 'localhost',
-                 '127.0.0.1',
-                 'loca.lt',
-                 ]
+# DEBUG = True
+# ALLOWED_HOSTS = ['*', #Permitir localhost y dominios de Loca.lt para pruebas locales
+#                  'localhost',
+#                  '127.0.0.1',
+#                  'loca.lt',
+                #  ]
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://loca.tl', ]
+# CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://loca.tl', ]
 
-SECURE_SSL_REDIRECT = True #Redirige todas las solicitudes http a https
-SESSION_COOKIE_SECURE = True #Asegura que las cookies de sesión solo se envíen a través de HTTPS
-CSRF_COOKIE_SECURE = True #Asegura que las cookies CSRF solo se envíen a través de HTTPS
-CSRF_COOKIE_SAMESITE = 'Lax' #Configura la política SameSite para las cookies CSRF
-CSRF_COOKIE_HTTPONLY = True #Evita que las cookies CSRF sean accesibles a través de JavaScript
+# SECURE_SSL_REDIRECT = True #Redirige todas las solicitudes http a https
+# SESSION_COOKIE_SECURE = True #Asegura que las cookies de sesión solo se envíen a través de HTTPS
+# CSRF_COOKIE_SECURE = True #Asegura que las cookies CSRF solo se envíen a través de HTTPS
+# CSRF_COOKIE_SAMESITE = 'Lax' #Configura la política SameSite para las cookies CSRF
+# CSRF_COOKIE_HTTPONLY = True #Evita que las cookies CSRF sean accesibles a través de JavaScript
+
+SESSION_COOKIE_AGE = 100 
+
+SESSION_SAVE_EVERY_REQUEST = True  # Reinicia el contador de tiempo de sesión en cada solicitud
+SESSION_EXPIRE_BROWSER_CLOSE = True  # Expira la sesión al cerrar el navegador
