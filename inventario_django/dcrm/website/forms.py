@@ -1,7 +1,46 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Registro
+from .models import Registro, Jornada
+
+class JornadaForm(forms.ModelForm):
+    """Formulario ModelForm para la entidad Jornada"""
+    
+    class Meta:
+        model = Jornada
+        fields = ['nombre', 'hora_inicio', 'hora_fin', 'dias_trabajo', 'activo']
+        widgets = {
+            'nombre': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Nombre del turno'
+            }),
+            'hora_inicio': forms.TimeInput(attrs={
+                'class': 'form-control',
+                'type': 'time'
+            }),
+            'hora_fin': forms.TimeInput(attrs={
+                'class': 'form-control',
+                'type': 'time'
+            }),
+            'dias_trabajo': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Días de trabajo (ej: L-M-M-V-F)'
+            }),
+            'activo': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        hora_inicio = cleaned_data.get('hora_inicio')
+        hora_fin = cleaned_data.get('hora_fin')
+        
+        if hora_inicio and hora_fin and hora_inicio >= hora_fin:
+            raise forms.ValidationError('La hora de inicio debe ser anterior a la hora de fin.')
+        
+        return cleaned_data
+
 
 class RegistroForm(UserCreationForm):
     """Formulario para el registro de nuevos usuarios"""

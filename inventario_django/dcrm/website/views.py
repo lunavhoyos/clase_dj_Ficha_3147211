@@ -1,10 +1,135 @@
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
-from .forms import RegistroForm
-from .models import Registro
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.http import JsonResponse, HttpResponse
+from django.template.loader import render_to_string
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+from .forms import RegistroForm, JornadaForm
+from .models import Registro, Jornada
+
+
+class AdminRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    """Mixin para restringir acceso únicamente a usuarios con rol ADMIN"""
+    
+    def test_func(self):
+        return self.request.user.groups.filter(name='ADMIN').exists() or self.request.user.is_superuser
+    
+    def handle_no_permission(self):
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': False,
+                'message': 'Acceso denegado. Se requiere rol ADMIN.',
+                'html': render_to_string('partials/toast_alert.html', {
+                    'message': 'Acceso denegado. Se requiere rol ADMIN.',
+                    'category': 'danger'
+                })
+            }, status=403)
+        messages.error(self.request, 'Acceso denegado. Se requiere rol ADMIN.')
+        return redirect('home')
+
+
+class JornadaListView(AdminRequiredMixin, ListView):
+    """Listado de jornadas con soporte AJAX"""
+    model = Jornada
+    template_name = 'partials/jornada_list.html'
+    context_object_name = 'jornadas'
+    paginate_by = 10
+
+    def get(self, request, *args, **kwargs):
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            self.object_list = self.get_queryset()
+            context = self.get_context_data()
+            html = render_to_string('partials/jornada_list.html', context, request=request)
+            return JsonResponse({'success': True, 'html': html})
+        return super().get(request, *args, **kwargs)
+
+
+class JornadaCreateView(AdminRequiredMixin, CreateView):
+    """Crear jornada con soporte AJAX"""
+    model = Jornada
+    form_class = JornadaForm
+    template_name = 'partials/jornada_form.html'
+
+    def form_valid(self, form):
+        form.save()
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'message': 'Jornada creada exitosamente.',
+                'html': render_to_string('partials/toast_alert.html', {
+                    'message': 'Jornada creada exitosamente.',
+                    'category': 'success'
+                })
+            })
+        return redirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            html = render_to_string('partials/jornada_form.html', {'form': form}, request=self.request)
+            return JsonResponse({'success': False, 'html': html, 'message': 'Error al crear la jornada.'})
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('jornada_list')
+
+
+class JornadaUpdateView(AdminRequiredMixin, UpdateView):
+    """Editar jornada con soporte AJAX"""
+    model = Jornada
+    form_class = JornadaForm
+    template_name = 'partials/jornada_form.html'
+
+    def form_valid(self, form):
+        form.save()
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'message': 'Jornada actualizada exitosamente.',
+                'html': render_to_string('partials/toast_alert.html', {
+                    'message': 'Jornada actualizada exitosamente.',
+                    'category': 'success'
+                })
+            })
+        return redirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            html = render_to_string('partials/jornada_form.html', {'form': form}, request=self.request)
+            return JsonResponse({'success': False, 'html': html, 'message': 'Error al actualizar la jornada.'})
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('jornada_list')
+
+
+class JornadaDeleteView(AdminRequiredMixin, DeleteView):
+    """Eliminar jornada con soporte AJAX"""
+    model = Jornada
+    template_name = 'partials/jornada_confirm_delete.html'
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            self.object.delete()
+            return JsonResponse({
+                'success': True,
+                'message': 'Jornada eliminada exitosamente.',
+                'html': render_to_string('partials/toast_alert.html', {
+                    'message': 'Jornada eliminada exitosamente.',
+                    'category': 'success'
+                })
+            })
+        return self.delete(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('jornada_list')
+
 
 def home(request):
     """Vista principal - muestra el formulario de registro si no está autenticado"""

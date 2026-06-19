@@ -1,0 +1,81 @@
+{% if jornadas %}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for jornada in jornadas %}
+    <div class="col">
+        <div class="card h-100 shadow-sm jornada-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{{ jornada.nombre }}</h5>
+                <span class="badge {% if jornada.activo %}bg-success{% else %}bg-secondary{% endif %}">
+                    {% if jornada.activo %}Activo{% else %}Inactivo{% endif %}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="mb-2">
+                    <small class="text-muted">Horario:</small>
+                    <p class="mb-0 fw-semibold">{{ jornada.hora_inicio|time:"H:i" }} - {{ jornada.hora_fin|time:"H:i" }}</p>
+                </div>
+                <div class="mb-2">
+                    <small class="text-muted">Días de trabajo:</small>
+                    <p class="mb-0">{{ jornada.dias_trabajo|default:"-" }}</p>
+                </div>
+                <div>
+                    <small class="text-muted">Creado:</small>
+                    <p class="mb-0">{{ jornada.fecha_creacion|date:"d/m/Y" }}</p>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent">
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-primary load-spa" data-url="{% url 'jornada_update' jornada.pk %}" data-target="#spa-content">
+                        ✏️ Editar
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger load-spa" data-url="{% url 'jornada_delete' jornada.pk %}" data-target="#spa-content">
+                        🗑️ Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if is_paginated %}
+<nav aria-label="Paginación de jornadas" class="mt-4">
+    <ul class="pagination pagination-sm justify-content-center flex-wrap">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link load-spa" href="?page={{ page_obj.previous_page_number }}" data-target="#spa-content">«</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">«</span>
+        </li>
+        {% endif %}
+        
+        {% for num in paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item">
+                <a class="page-link load-spa" href="?page={{ num }}" data-target="#spa-content">{{ num }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link load-spa" href="?page={{ page_obj.next_page_number }}" data-target="#spa-content">»</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">»</span>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% else %}
+<div class="alert alert-info text-center">No hay jornadas registradas.</div>
+{% endif %}
