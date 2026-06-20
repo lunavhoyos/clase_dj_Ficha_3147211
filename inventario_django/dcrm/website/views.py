@@ -9,6 +9,8 @@ from django.http import JsonResponse, HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
 
 from .forms import RegistroForm, JornadaForm
 from .models import Registro, Jornada
@@ -34,10 +36,11 @@ class AdminRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
         return redirect('home')
 
 
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class JornadaListView(AdminRequiredMixin, ListView):
     """Listado de jornadas con soporte AJAX"""
     model = Jornada
-    template_name = 'partials/jornada_list.html'
+    template_name = 'jornada_home.html'
     context_object_name = 'jornadas'
     paginate_by = 10
 
@@ -131,6 +134,7 @@ class JornadaDeleteView(AdminRequiredMixin, DeleteView):
         return reverse_lazy('jornada_list')
 
 
+@ensure_csrf_cookie
 def home(request):
     """Vista principal - muestra el formulario de registro si no está autenticado"""
     if request.user.is_authenticated:
