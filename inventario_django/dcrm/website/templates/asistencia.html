@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Registrar Asistencia — Django CRM{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">✅ Registrar Asistencia</h2>
+
+<div id="spa-panel">
+
+  {% if jornadas %}
+  <div class="mb-4">
+    <label for="selector-jornada" class="form-label fw-semibold">Seleccionar jornada:</label>
+    <select id="selector-jornada" class="form-select w-auto d-inline-block"
+            onchange="window.location.href='?jornada_id=' + this.value">
+      <option value="">— Elige una jornada —</option>
+      {% for j in jornadas %}
+      <option value="{{ j.pk }}"
+              {% if jornada and jornada.pk == j.pk %}selected{% endif %}>
+        {{ j.titulo }} — {{ j.barrio }} ({{ j.fecha|date:"d/m/Y H:i" }})
+      </option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endif %}
+
+  {% if jornada %}
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h5 class="mb-0">{{ jornada.titulo }} — {{ jornada.barrio }}</h5>
+        <small class="text-muted">{{ jornada.fecha|date:"d/m/Y" }} a las {{ jornada.fecha|time:"H:i" }}</small>
+      </div>
+      <div class="card-body">
+        {% if inscripciones %}
+        <form method="post"
+              action="{% url 'asistencia_registrar' %}"
+              class="ajax-form">
+          {% csrf_token %}
+          <input type="hidden" name="jornada_id" value="{{ jornada.pk }}">
+
+          <p class="text-muted small mb-3">
+            Marca los participantes que asistieron a la jornada.
+          </p>
+
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">
+                    <input type="checkbox" id="sel-todos" class="form-check-input"
+                           title="Seleccionar todos" aria-label="Seleccionar todos">
+                  </th>
+                  <th scope="col">Participante</th>
+                  <th scope="col">Correo</th>
+                  <th scope="col">Inscripción</th>
+                  <th scope="col">Estado previo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for ins in inscripciones %}
+                <tr>
+                  <td>
+                    <input type="checkbox"
+                           class="form-check-input check-inscripcion"
+                           name="inscritos_confirmados"
+                           value="{{ ins.pk }}"
+                           id="ins-{{ ins.pk }}"
+                           {% if ins.asistencia %}checked{% endif %}
+                           aria-label="Marcar asistencia de {{ ins.residente.get_full_name|default:ins.residente.username }}">
+                  </td>
+                  <td>
+                    <label for="ins-{{ ins.pk }}" class="mb-0">
+                      {{ ins.residente.get_full_name|default:ins.residente.username }}
+                    </label>
+                  </td>
+                  <td><small class="text-muted">{{ ins.residente.email }}</small></td>
+                  <td><small class="text-muted">{{ ins.fecha_inscripcion|date:"d/m/Y H:i" }}</small></td>
+                  <td>
+                    {% if ins.asistencia %}
+                      <span class="badge bg-success">✓ Asistió</span>
+                    {% else %}
+                      <span class="badge bg-light text-dark border">Pendiente</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button type="submit" class="btn btn-primary">
+              Guardar asistencia
+            </button>
+          </div>
+        </form>
+        {% else %}
+        <div class="alert alert-info" role="alert">
+          No hay participantes inscritos en esta jornada.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  {% elif jornadas %}
+  <div class="alert alert-info" role="alert">
+    Selecciona una jornada para registrar asistencia.
+  </div>
+  {% else %}
+  <div class="alert alert-warning" role="alert">
+    No hay jornadas activas o finalizadas disponibles.
+  </div>
+  {% endif %}
+
+</div>
+
+<script src="{% static 'js/spa_motor.js' %}"></script>
+<script>
+  // Seleccionar / deseleccionar todos
+  const selTodos = document.getElementById('sel-todos');
+  if (selTodos) {
+    selTodos.addEventListener('change', function() {
+      document.querySelectorAll('.check-inscripcion').forEach(cb => {
+        cb.checked = selTodos.checked;
+      });
+    });
+  }
+</script>
+{% endblock %}

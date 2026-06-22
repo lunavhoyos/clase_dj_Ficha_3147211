@@ -1,62 +1,152 @@
 <div class="card shadow-sm">
-    <div class="card-header">
-        <h5 class="mb-0">{% if object %}Editar Jornada{% else %}Crear Jornada{% endif %}</h5>
-    </div>
-    <div class="card-body">
-        <form method="post" class="ajax-form" data-success-message="{% if object %}Jornada actualizada{% else %}Jornada creada{% endif %}">
-            {% csrf_token %}
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre del turno</label>
-                    {{ form.nombre }}
-                    {% if form.nombre.errors %}
-                    <div class="invalid-feedback d-block">
-                        {{ form.nombre.errors.as_text }}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="col-md-3">
-                    <label for="{{ form.hora_inicio.id_for_label }}" class="form-label">Hora inicio</label>
-                    {{ form.hora_inicio }}
-                    {% if form.hora_inicio.errors %}
-                    <div class="invalid-feedback d-block">
-                        {{ form.hora_inicio.errors.as_text }}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="col-md-3">
-                    <label for="{{ form.hora_fin.id_for_label }}" class="form-label">Hora fin</label>
-                    {{ form.hora_fin }}
-                    {% if form.hora_fin.errors %}
-                    <div class="invalid-feedback d-block">
-                        {{ form.hora_fin.errors.as_text }}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="col-12">
-                    <label for="{{ form.dias_trabajo.id_for_label }}" class="form-label">Días de trabajo</label>
-                    {{ form.dias_trabajo }}
-                    <small class="text-muted">Formato: L-M-M-V-F (Lunes a Viernes)</small>
-                    {% if form.dias_trabajo.errors %}
-                    <div class="invalid-feedback d-block">
-                        {{ form.dias_trabajo.errors.as_text }}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="col-12">
-                    <div class="form-check">
-                        {{ form.activo }}
-                        <label class="form-check-label" for="{{ form.activo.id_for_label }}">
-                            Jornada activa
-                        </label>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="d-flex gap-2 mt-4">
-                <button type="submit" class="btn btn-primary">{% if object %}Actualizar{% else %}Crear{% endif %}</button>
-                <button type="button" class="btn btn-secondary load-spa" data-url="{% url 'jornada_list' %}" data-target="#spa-content">Cancelar</button>
-            </div>
-        </form>
-    </div>
+  <div class="card-header">
+    <h5 class="mb-0">
+      {% if object %}✏️ Editar Jornada{% else %}➕ Crear Jornada{% endif %}
+    </h5>
+  </div>
+  <div class="card-body">
+    <form method="post"
+          class="ajax-form"
+          action="{% if object %}{% url 'jornada_update' object.pk %}{% else %}{% url 'jornada_create' %}{% endif %}"
+          novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">
+        {% for error in form.non_field_errors %}
+          <div>{{ error }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="row g-3">
+
+        <div class="col-12">
+          <label for="{{ form.titulo.id_for_label }}" class="form-label fw-semibold">
+            Título <span class="text-danger" aria-hidden="true">*</span>
+          </label>
+          {{ form.titulo }}
+          {% if form.titulo.errors %}
+          <div class="invalid-feedback d-block" role="alert">
+            {% for e in form.titulo.errors %}{{ e }}{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col-12">
+          <label for="{{ form.descripcion.id_for_label }}" class="form-label fw-semibold">
+            Descripción <span class="text-danger" aria-hidden="true">*</span>
+          </label>
+          {{ form.descripcion }}
+          <div class="form-text">Mínimo 10 caracteres, máximo 500.</div>
+          {% if form.descripcion.errors %}
+          <div class="invalid-feedback d-block" role="alert">
+            {% for e in form.descripcion.errors %}{{ e }}{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ form.fecha.id_for_label }}" class="form-label fw-semibold">
+            Fecha y hora <span class="text-danger" aria-hidden="true">*</span>
+          </label>
+          {{ form.fecha }}
+          <div class="form-text">Debe ser una fecha y hora futuras.</div>
+          {% if form.fecha.errors %}
+          <div class="invalid-feedback d-block" role="alert">
+            {% for e in form.fecha.errors %}{{ e }}{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ form.tipo_material.id_for_label }}" class="form-label fw-semibold">
+            Tipo de material <span class="text-danger" aria-hidden="true">*</span>
+          </label>
+          {{ form.tipo_material }}
+          {% if form.tipo_material.errors %}
+          <div class="invalid-feedback d-block" role="alert">
+            {% for e in form.tipo_material.errors %}{{ e }}{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col-md-8">
+          <label for="{{ form.direccion.id_for_label }}" class="form-label fw-semibold">
+            Punto de encuentro <span class="text-danger" aria-hidden="true">*</span>
+          </label>
+          {{ form.direccion }}
+          {% if form.direccion.errors %}
+          <div class="invalid-feedback d-block" role="alert">
+            {% for e in form.direccion.errors %}{{ e }}{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col-md-4">
+          <label for="{{ form.barrio.id_for_label }}" class="form-label fw-semibold">
+            Barrio <span class="text-danger" aria-hidden="true">*</span>
+          </label>
+          {{ form.barrio }}
+          {% if form.barrio.errors %}
+          <div class="invalid-feedback d-block" role="alert">
+            {% for e in form.barrio.errors %}{{ e }}{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col-md-4">
+          <label for="{{ form.cupo_maximo.id_for_label }}" class="form-label fw-semibold">
+            Cupo máximo <span class="text-danger" aria-hidden="true">*</span>
+          </label>
+          {{ form.cupo_maximo }}
+          <div class="form-text">Entre 1 y 200 personas.</div>
+          {% if form.cupo_maximo.errors %}
+          <div class="invalid-feedback d-block" role="alert">
+            {% for e in form.cupo_maximo.errors %}{{ e }}{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col-md-4">
+          <label for="{{ form.estado.id_for_label }}" class="form-label fw-semibold">
+            Estado
+          </label>
+          {{ form.estado }}
+          {% if form.estado.errors %}
+          <div class="invalid-feedback d-block" role="alert">
+            {% for e in form.estado.errors %}{{ e }}{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col-md-4">
+          <label for="{{ form.id_organizador.id_for_label }}" class="form-label fw-semibold">
+            Organizador
+          </label>
+          {{ form.id_organizador }}
+          <div class="form-text">Requerido para publicar la jornada (estado activa).</div>
+          {% if form.id_organizador.errors %}
+          <div class="invalid-feedback d-block" role="alert">
+            {% for e in form.id_organizador.errors %}{{ e }}{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <div class="d-flex gap-2 mt-4 flex-wrap">
+        <button type="submit" class="btn btn-primary">
+          {% if object %}Actualizar{% else %}Crear Jornada{% endif %}
+        </button>
+        <button type="button"
+                class="btn btn-secondary load-spa"
+                data-url="{% url 'jornada_list' %}"
+                data-target="#spa-panel">
+          Cancelar
+        </button>
+      </div>
+
+    </form>
+  </div>
 </div>

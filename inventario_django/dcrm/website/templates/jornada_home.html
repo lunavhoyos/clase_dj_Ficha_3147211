@@ -1,17 +1,24 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content %}
+{% block title %}Gestión de Jornadas — Django CRM{% endblock %}
 
+{% block content %}
 <div id="spa-content">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Gestión de Jornadas</h2>
-        <button class="btn btn-primary load-spa" data-url="{% url 'jornada_create' %}" data-target="#spa-content">
-            + Nueva Jornada
-        </button>
-    </div>
-    
+
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <h2 class="mb-0">⚙️ Gestión de Jornadas</h2>
+    <button class="btn btn-primary load-spa"
+            data-url="{% url 'jornada_create' %}"
+            data-target="#spa-panel">
+      ➕ Nueva Jornada
+    </button>
+  </div>
+
+  <div id="spa-panel">
     {% include 'partials/jornada_list.html' %}
+  </div>
+
 </div>
 
 <script src="{% static 'js/spa_motor.js' %}"></script>

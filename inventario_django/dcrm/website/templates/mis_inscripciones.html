@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mis Inscripciones — Django CRM{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">📋 Mis Inscripciones</h2>
+
+{% if inscripciones %}
+<div class="table-responsive">
+  <table class="table table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th scope="col">Jornada</th>
+        <th scope="col">Barrio</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Material</th>
+        <th scope="col">Estado jornada</th>
+        <th scope="col">Inscripción</th>
+        <th scope="col">Asistencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for inscripcion in inscripciones %}
+      <tr>
+        <td>
+          <strong>{{ inscripcion.jornada.titulo }}</strong>
+          <br>
+          <small class="text-muted">{{ inscripcion.jornada.direccion }}</small>
+        </td>
+        <td>{{ inscripcion.jornada.barrio }}</td>
+        <td>
+          {{ inscripcion.jornada.fecha|date:"d/m/Y" }}<br>
+          <small class="text-muted">{{ inscripcion.jornada.fecha|time:"H:i" }}</small>
+        </td>
+        <td>{{ inscripcion.jornada.get_tipo_material_display }}</td>
+        <td>
+          <span class="badge
+            {% if inscripcion.jornada.estado == 'activa' %}bg-success
+            {% elif inscripcion.jornada.estado == 'pendiente' %}bg-warning text-dark
+            {% elif inscripcion.jornada.estado == 'cancelada' %}bg-danger
+            {% else %}bg-secondary{% endif %}">
+            {{ inscripcion.jornada.get_estado_display }}
+          </span>
+        </td>
+        <td>
+          <small class="text-muted">{{ inscripcion.fecha_inscripcion|date:"d/m/Y H:i" }}</small>
+        </td>
+        <td>
+          {% if inscripcion.asistencia %}
+            <span class="badge bg-success">✓ Asistió</span>
+          {% elif inscripcion.confirmada %}
+            <span class="badge bg-info text-dark">Confirmada</span>
+          {% else %}
+            <span class="badge bg-light text-dark border">Pendiente</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-info text-center" role="alert">
+  No tienes inscripciones registradas.
+</div>
+{% endif %}
+{% endblock %}

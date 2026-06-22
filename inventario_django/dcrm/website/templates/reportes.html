@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Reportes — Django CRM{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">📊 Reportes y Métricas</h2>
+
+<div class="row g-4 mb-4">
+
+  <div class="col-md-4">
+    <div class="card text-center border-primary shadow-sm h-100">
+      <div class="card-body">
+        <div class="display-5 fw-bold text-primary">{{ total_jornadas }}</div>
+        <p class="card-text text-muted mt-1">Jornadas totales</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card text-center border-success shadow-sm h-100">
+      <div class="card-body">
+        <div class="display-5 fw-bold text-success">{{ total_inscritos }}</div>
+        <p class="card-text text-muted mt-1">Inscripciones totales</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card text-center border-info shadow-sm h-100">
+      <div class="card-body">
+        <div class="display-5 fw-bold text-info">{{ pct_asistencia }}%</div>
+        <p class="card-text text-muted mt-1">
+          Asistencia promedio
+          <br><small>({{ total_asistieron }} de {{ total_inscritos }})</small>
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row g-4">
+
+  <div class="col-md-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-header fw-semibold">Jornadas por estado</div>
+      <div class="card-body p-0">
+        <table class="table table-sm mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">Estado</th>
+              <th scope="col" class="text-end">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in jornadas_por_estado %}
+            <tr>
+              <td>
+                <span class="badge
+                  {% if item.estado == 'activa' %}bg-success
+                  {% elif item.estado == 'pendiente' %}bg-warning text-dark
+                  {% elif item.estado == 'cancelada' %}bg-danger
+                  {% else %}bg-secondary{% endif %}">
+                  {{ item.estado|capfirst }}
+                </span>
+              </td>
+              <td class="text-end fw-semibold">{{ item.total }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="2" class="text-center text-muted">Sin datos</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-header fw-semibold">Top 5 jornadas con más inscritos</div>
+      <div class="card-body p-0">
+        <table class="table table-sm mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Jornada</th>
+              <th scope="col">Barrio</th>
+              <th scope="col" class="text-end">Inscritos</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for j in top_jornadas %}
+            <tr>
+              <td class="text-muted">{{ forloop.counter }}</td>
+              <td>{{ j.titulo }}</td>
+              <td>{{ j.barrio }}</td>
+              <td class="text-end fw-semibold">{{ j.num_inscritos }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center text-muted">Sin datos</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

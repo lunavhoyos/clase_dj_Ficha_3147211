@@ -61,8 +61,12 @@ class JornadaForm(forms.ModelForm):
 
     def clean_descripcion(self):
         descripcion = self.cleaned_data.get('descripcion')
-        if descripcion and len(descripcion.strip()) < 10:
-            raise forms.ValidationError('La descripción debe tener al menos 10 caracteres.')
+        if descripcion:
+            desc = descripcion.strip()
+            if len(desc) < 10:
+                raise forms.ValidationError('La descripción debe tener al menos 10 caracteres.')
+            if len(desc) > 500:
+                raise forms.ValidationError('La descripción no puede superar los 500 caracteres.')
         return descripcion
 
     def clean_cupo_maximo(self):

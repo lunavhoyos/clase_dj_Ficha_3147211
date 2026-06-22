@@ -127,4 +127,58 @@
     }
     
     document.addEventListener('DOMContentLoaded', initSPAMotor);
+
+    // -----------------------------------------------------------------------
+    // Handler de inscripción a jornada (.inscribir-btn)
+    // POST via AJAX; actualiza el botón sin recargar la página.
+    // -----------------------------------------------------------------------
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.inscribir-btn');
+        if (!btn) return;
+        e.preventDefault();
+
+        const url = btn.dataset.url;
+        if (!url) return;
+
+        // Feedback inmediato: deshabilitar mientras carga
+        btn.disabled = true;
+        const textoOriginal = btn.textContent;
+        btn.textContent = 'Inscribiendo…';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(function(response) {
+            if (!response.ok && response.status !== 400) {
+                throw new Error('Error de servidor: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(function(data) {
+            const category = data.toast_category || (data.success ? 'success' : 'danger');
+            showToast(data.message || (data.success ? 'Operación exitosa.' : 'Error al procesar.'), category);
+
+            if (data.success) {
+                btn.textContent = '✓ Ya inscrito';
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-success');
+                // Mantener deshabilitado — ya está inscrito
+            } else {
+                // Restaurar botón si falló (cupo lleno, etc.)
+                btn.disabled = false;
+                btn.textContent = textoOriginal;
+            }
+        })
+        .catch(function(err) {
+            console.error('Inscripción error:', err);
+            showToast('Error de conexión. Intenta de nuevo.', 'danger');
+            btn.disabled = false;
+            btn.textContent = textoOriginal;
+        });
+    });
+
 })();

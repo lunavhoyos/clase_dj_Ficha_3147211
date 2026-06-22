@@ -49,7 +49,7 @@ class Jornada(models.Model):
             message='Caracteres sospechosos no permitidos.',
             code='sql_injection_blocked'
         )],
-        help_text='Descripción detallada de la jornada (mínimo 10 caracteres)'
+        help_text='Descripción detallada de la jornada (mínimo 10, máximo 500 caracteres)'
     )
 
     fecha = models.DateTimeField(help_text='Fecha y hora de la jornada')
@@ -105,14 +105,50 @@ class Jornada(models.Model):
         return f"{self.titulo} - {self.barrio} ({self.fecha.strftime('%d/%m/%Y %H:%M')})"
 
     def clean(self):
+        # RN1.1.1 — fecha y hora deben ser futuras
         if self.fecha and self.fecha <= timezone.now():
             raise ValidationError('La fecha y hora deben ser futuras al momento de la creación.')
 
-        if self.descripcion and len(self.descripcion.strip()) < 10:
-            raise ValidationError('La descripción debe contener mínimo 10 caracteres.')
+        # RN1.1.2 — descripción: mínimo 10, máximo 500 caracteres
+        if self.descripcion:
+            desc = self.descripcion.strip()
+            if len(desc) < 10:
+                raise ValidationError('La descripción debe contener mínimo 10 caracteres.')
+            if len(desc) > 500:
+                raise ValidationError('La descripción no puede superar los 500 caracteres.')
 
+        # RN1.1.2 — cupo máximo entre 1 y 200
         if self.cupo_maximo and (self.cupo_maximo < 1 or self.cupo_maximo > 200):
             raise ValidationError('El cupo máximo debe ser mayor a cero y no puede superar 200 personas.')
+
+        # RN1.1.2 — unicidad barrio + fecha + hora
+        if self.fecha and self.barrio:
+            conflicto = Jornada.objects.filter(
+                barrio__iexact=self.barrio,
+                fecha=self.fecha,
+                estado__in=['pendiente', 'activa']
+            ).exclude(pk=self.pk if self.pk else None)
+            if conflicto.exists():
+                raise ValidationError(
+                    'Ya existe una jornada activa en este barrio para esa fecha y hora.'
+                )
+
+    @property
+    def inscritos_count(self):
+        """Número de inscritos actuales."""
+        return self.inscripciones.count()
+
+    @property
+    def cupo_disponible(self):
+        """Indica si quedan lugares disponibles."""
+        return self.inscritos_count < self.cupo_maximo
+
+    @property
+    def porcentaje_inscripcion(self):
+        """Porcentaje del cupo ocupado (0-100)."""
+        if not self.cupo_maximo:
+            return 0
+        return (self.inscritos_count / self.cupo_maximo) * 100
 
 
 class Registro(models.Model):

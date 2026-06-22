@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Jornadas Disponibles — Django CRM{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+  <div>
+    <h2 class="mb-0">♻️ Jornadas Disponibles</h2>
+    {% if user_rol == 'RESIDENTE' %}
+      {% with barrio=request.user.registro.barrio %}
+        {% if barrio %}
+        <p class="text-muted mb-0 small">
+          Mostrando jornadas activas en tu barrio: <strong>{{ barrio }}</strong>
+        </p>
+        {% endif %}
+      {% endwith %}
+    {% else %}
+      <p class="text-muted mb-0 small">Mostrando todas las jornadas activas.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% if jornadas %}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  {% for jornada in jornadas %}
+  <div class="col">
+    {% include 'partials/jornada_card_residente.html' %}
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info text-center" role="alert">
+  {% if user_rol == 'RESIDENTE' %}
+    No hay jornadas activas disponibles en tu barrio.
+  {% else %}
+    No hay jornadas activas disponibles.
+  {% endif %}
+</div>
+{% endif %}
+
+<script src="{% static 'js/spa_motor.js' %}"></script>
+{% endblock %}

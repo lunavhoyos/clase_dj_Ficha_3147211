@@ -1,17 +1,51 @@
-<div class="card shadow-sm">
-    <div class="card-header bg-danger text-white">
-        <h5 class="mb-0">Confirmar Eliminación</h5>
+<div class="card shadow-sm border-danger">
+  <div class="card-header bg-danger text-white">
+    <h5 class="mb-0">🚫 Cancelar Jornada</h5>
+  </div>
+  <div class="card-body">
+
+    {% if advertencia_cupo %}
+    <div class="alert alert-warning d-flex align-items-start gap-2" role="alert">
+      <span class="fs-5" aria-hidden="true">⚠️</span>
+      <div>
+        <strong>Atención:</strong> Más del 50% del cupo de esta jornada ya está inscrito
+        (<strong>{{ object.inscritos_count }}</strong> de <strong>{{ object.cupo_maximo }}</strong> lugares ocupados).
+        ¿Estás seguro de que deseas cancelarla?
+      </div>
     </div>
-    <div class="card-body">
-        <p class="mb-3">¿Está seguro de eliminar la jornada <strong>{{ object.nombre }}</strong>?</p>
-        <p class="text-muted small">Esta acción no se puede deshacer.</p>
-        
-        <div class="d-flex gap-2 mt-4">
-            <form method="post" class="ajax-delete-form" action="{% url 'jornada_delete' object.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Sí, eliminar</button>
-            </form>
-            <button type="button" class="btn btn-secondary load-spa" data-url="{% url 'jornada_list' %}" data-target="#spa-content">Cancelar</button>
-        </div>
-    </div>
+    {% endif %}
+
+    <p class="mb-1">
+      ¿Confirmas la cancelación de la siguiente jornada?
+    </p>
+    <ul class="list-unstyled ms-2 mb-3 small">
+      <li><strong>Título:</strong> {{ object.titulo }}</li>
+      <li><strong>Barrio:</strong> {{ object.barrio }}</li>
+      <li><strong>Fecha:</strong> {{ object.fecha|date:"d/m/Y" }} a las {{ object.fecha|time:"H:i" }}</li>
+      <li><strong>Estado actual:</strong> {{ object.get_estado_display }}</li>
+    </ul>
+
+    <p class="text-muted small">
+      Esta acción cambiará el estado de la jornada a <strong>Cancelada</strong>.
+      Los participantes ya inscritos no serán eliminados automáticamente.
+    </p>
+
+    <form method="post"
+          action="{% url 'jornada_delete' object.pk %}"
+          class="ajax-delete-form">
+      {% csrf_token %}
+      <div class="d-flex gap-2 flex-wrap">
+        <button type="submit" class="btn btn-danger">
+          Confirmar cancelación
+        </button>
+        <button type="button"
+                class="btn btn-secondary load-spa"
+                data-url="{% url 'jornada_list' %}"
+                data-target="#spa-panel">
+          Volver al listado
+        </button>
+      </div>
+    </form>
+
+  </div>
 </div>

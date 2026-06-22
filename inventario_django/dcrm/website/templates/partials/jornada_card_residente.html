@@ -1,0 +1,54 @@
+{% with inscritos=jornada.inscripciones.count %}
+<div class="card h-100 shadow-sm">
+
+  <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <h6 class="mb-0 fw-semibold">{{ jornada.titulo }}</h6>
+    <span class="badge bg-success">{{ jornada.get_tipo_material_display }}</span>
+  </div>
+
+  <div class="card-body">
+    <ul class="list-unstyled mb-0 small">
+      <li class="mb-1">
+        <span class="text-muted">📅 Fecha:</span>
+        <strong>{{ jornada.fecha|date:"d/m/Y" }}</strong>
+        a las <strong>{{ jornada.fecha|time:"H:i" }}</strong>
+      </li>
+      <li class="mb-1">
+        <span class="text-muted">📍 Barrio:</span> {{ jornada.barrio }}
+      </li>
+      <li class="mb-1">
+        <span class="text-muted">🗺️ Punto de encuentro:</span> {{ jornada.direccion }}
+      </li>
+      {% if jornada.descripcion %}
+      <li class="mt-2 text-muted fst-italic">
+        {{ jornada.descripcion|truncatewords:20 }}
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+
+  <div class="card-footer bg-transparent">
+    <div class="d-flex justify-content-between align-items-center">
+      {% if inscritos >= jornada.cupo_maximo %}
+        <span class="badge bg-danger">Cupo agotado</span>
+        <button class="btn btn-secondary btn-sm" disabled aria-disabled="true">
+          Sin cupo
+        </button>
+      {% elif jornada.pk in inscripciones_ids %}
+        <span class="text-muted small">{{ inscritos }}/{{ jornada.cupo_maximo }} inscritos</span>
+        <button class="btn btn-outline-success btn-sm" disabled aria-disabled="true">
+          ✓ Ya inscrito
+        </button>
+      {% else %}
+        <span class="text-muted small">{{ inscritos }}/{{ jornada.cupo_maximo }} inscritos</span>
+        <button class="btn btn-primary btn-sm inscribir-btn"
+                data-url="{% url 'jornada_inscribir' jornada.pk %}"
+                aria-label="Inscribirse a {{ jornada.titulo }}">
+          Inscribirse
+        </button>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endwith %}
