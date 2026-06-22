@@ -1,53 +1,82 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.utils import timezone
 from .models import Registro, Jornada
+
 
 class JornadaForm(forms.ModelForm):
     """Formulario ModelForm para la entidad Jornada"""
-    
+
     class Meta:
         model = Jornada
-        fields = ['nombre', 'hora_inicio', 'hora_fin', 'dias_trabajo', 'activo']
+        fields = ['titulo', 'descripcion', 'fecha', 'direccion', 'barrio', 'tipo_material', 'cupo_maximo', 'estado', 'id_organizador']
         widgets = {
-            'nombre': forms.TextInput(attrs={
+            'titulo': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Nombre del turno'
+                'placeholder': 'Título de la jornada'
             }),
-            'hora_inicio': forms.TimeInput(attrs={
+            'descripcion': forms.Textarea(attrs={
                 'class': 'form-control',
-                'type': 'time'
+                'placeholder': 'Descripción de la jornada (mínimo 10 caracteres)',
+                'rows': 3
             }),
-            'hora_fin': forms.TimeInput(attrs={
+            'fecha': forms.DateTimeInput(attrs={
                 'class': 'form-control',
-                'type': 'time'
+                'type': 'datetime-local'
             }),
-            'dias_trabajo': forms.TextInput(attrs={
+            'direccion': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Días de trabajo (ej: L-M-M-V-F)'
+                'placeholder': 'Punto de encuentro'
             }),
-            'activo': forms.CheckboxInput(attrs={
-                'class': 'form-check-input'
+            'barrio': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Barrio donde se realizará la jornada'
+            }),
+            'tipo_material': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'cupo_maximo': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1,
+                'max': 200
+            }),
+            'estado': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'id_organizador': forms.Select(attrs={
+                'class': 'form-select'
             }),
         }
 
-    def clean(self):
-        cleaned_data = super().clean()
-        hora_inicio = cleaned_data.get('hora_inicio')
-        hora_fin = cleaned_data.get('hora_fin')
-        
-        if hora_inicio and hora_fin and hora_inicio >= hora_fin:
-            raise forms.ValidationError('La hora de inicio debe ser anterior a la hora de fin.')
-        
-        return cleaned_data
+    def __init__(self, *args, **kwargs):
+        super(JornadaForm, self).__init__(*args, **kwargs)
+        self.fields['id_organizador'].queryset = User.objects.filter(groups__name__in=['ADMIN', 'ORGANIZADOR']).distinct()
+
+    def clean_fecha(self):
+        fecha = self.cleaned_data.get('fecha')
+        if fecha and fecha <= timezone.now():
+            raise forms.ValidationError('La fecha y hora deben ser futuras.')
+        return fecha
+
+    def clean_descripcion(self):
+        descripcion = self.cleaned_data.get('descripcion')
+        if descripcion and len(descripcion.strip()) < 10:
+            raise forms.ValidationError('La descripción debe tener al menos 10 caracteres.')
+        return descripcion
+
+    def clean_cupo_maximo(self):
+        cupo_maximo = self.cleaned_data.get('cupo_maximo')
+        if cupo_maximo is not None and (cupo_maximo < 1 or cupo_maximo > 200):
+            raise forms.ValidationError('El cupo máximo debe estar entre 1 y 200 personas.')
+        return cupo_maximo
 
 
 class RegistroForm(UserCreationForm):
     """Formulario para el registro de nuevos usuarios"""
-    
-    # Campos de usuario
+
     first_name = forms.CharField(
-        max_length=30, 
+        max_length=30,
         required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
@@ -55,16 +84,16 @@ class RegistroForm(UserCreationForm):
             'autofocus': True
         })
     )
-    
+
     last_name = forms.CharField(
-        max_length=30, 
+        max_length=30,
         required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Apellido'
         })
     )
-    
+
     email = forms.EmailField(
         max_length=254,
         required=True,
@@ -73,8 +102,7 @@ class RegistroForm(UserCreationForm):
             'placeholder': 'Correo electronico'
         })
     )
-    
-    # Campos adicionales esenciales
+
     telefono = forms.CharField(
         max_length=20,
         required=False,
@@ -83,7 +111,7 @@ class RegistroForm(UserCreationForm):
             'placeholder': 'Telefono (opcional)'
         })
     )
-    
+
     direccion = forms.CharField(
         max_length=255,
         required=False,
@@ -92,7 +120,7 @@ class RegistroForm(UserCreationForm):
             'placeholder': 'Direccion (opcional)'
         })
     )
-    
+
     ciudad = forms.CharField(
         max_length=100,
         required=False,
@@ -101,7 +129,16 @@ class RegistroForm(UserCreationForm):
             'placeholder': 'Ciudad (opcional)'
         })
     )
-    
+
+    barrio = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Barrio de residencia (Obligatorio)'
+        })
+    )
+
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
@@ -111,10 +148,9 @@ class RegistroForm(UserCreationForm):
                 'placeholder': 'Nombre de usuario'
             }),
         }
-    
+
     def __init__(self, *args, **kwargs):
         super(RegistroForm, self).__init__(*args, **kwargs)
-        # Personalizar mensajes de ayuda
         self.fields['username'].help_text = 'Requerido. 150 caracteres o menos. Solo letras, numeros y @/./+/-/_'
         self.fields['password1'].help_text = '''
             <ul class="mb-0">
@@ -125,26 +161,30 @@ class RegistroForm(UserCreationForm):
             </ul>
         '''
         self.fields['password2'].help_text = 'Para verificar, ingrese la misma contrasena anterior.'
-        
-        # Agregar clases a los campos de contrasena
+
         self.fields['password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['password2'].widget.attrs.update({'class': 'form-control'})
-    
+
     def save(self, commit=True):
         user = super(RegistroForm, self).save(commit=False)
         user.email = self.cleaned_data['email']
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']
-        
+
         if commit:
             user.save()
-            
-            # Crear el registro asociado
+
+            from django.contrib.auth.models import Group
+            rol_nombre = 'RESIDENTE'
+            group, created = Group.objects.get_or_create(name=rol_nombre)
+            user.groups.add(group)
+
             Registro.objects.create(
                 user=user,
                 telefono=self.cleaned_data.get('telefono', ''),
                 direccion=self.cleaned_data.get('direccion', ''),
-                ciudad=self.cleaned_data.get('ciudad', '')
+                ciudad=self.cleaned_data.get('ciudad', ''),
+                barrio=self.cleaned_data.get('barrio', '')
             )
-        
+
         return user

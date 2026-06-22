@@ -1,0 +1,29 @@
+<div class="toast align-items-center text-bg-{{ category }} border-0 spa-dynamic-toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+        <div class="toast-body">
+            {{ message }}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+
+<script>
+    (function() {
+        var toastEl = document.querySelector('.spa-dynamic-toast:not(.show)');
+        if (toastEl) {
+            var container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container position-fixed top-0 end-0 p-3';
+                document.body.appendChild(container);
+            }
+            container.appendChild(toastEl);
+            var toast = new bootstrap.Toast(toastEl);
+            toast.show();
+            // Eliminar del DOM después de que termine la animación de ocultado
+            toastEl.addEventListener('hidden.bs.toast', function() {
+                toastEl.remove();
+            });
+        }
+    })();
+</script>

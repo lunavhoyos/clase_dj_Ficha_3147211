@@ -1,0 +1,72 @@
+<div class="row g-4">
+    <!-- Columna Izquierda: Estadísticas de Barrio -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-header bg-white border-0 py-3">
+                <h6 class="mb-0 fw-bold" style="color: var(--primary-color);">📍 Residentes por Barrio</h6>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for stat in barrios_stats %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3 px-4">
+                        <span class="fw-semibold">{{ stat.barrio|default:"Sin Barrio" }}</span>
+                        <span class="badge bg-primary rounded-pill">{{ stat.total }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center text-muted py-3">No hay datos por barrio.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Columna Derecha: Detalle de Asistencia de Jornadas -->
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="mb-0 fw-bold" style="color: var(--primary-color);">📊 Reporte de Asistencia</h5>
+                <small class="text-muted">Estado actual de todos los inscritos en las jornadas</small>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr class="table-light text-secondary">
+                            <th class="ps-4">Residente</th>
+                            <th>Jornada</th>
+                            <th>Barrio</th>
+                            <th class="pe-4 text-center">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inscripcion in inscripciones %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-bold text-dark">{{ inscripcion.residente.first_name }} {{ inscripcion.residente.last_name }}</div>
+                                <small class="text-muted">@{{ inscripcion.residente.username }}</small>
+                            </td>
+                            <td>
+                                <span class="fw-semibold text-primary">{{ inscripcion.jornada.nombre }}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark">{{ inscripcion.jornada.barrio }}</span>
+                            </td>
+                            <td class="pe-4 text-center">
+                                {% if inscripcion.asistencia %}
+                                <span class="badge bg-success-subtle text-success border border-success rounded-pill px-3 py-1">Asistió</span>
+                                {% else %}
+                                <span class="badge bg-warning-subtle text-warning border border-warning rounded-pill px-3 py-1">Inscrito / Pendiente</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">No hay inscripciones registradas para generar reportes.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

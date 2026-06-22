@@ -1,0 +1,95 @@
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-header bg-white border-0 py-3">
+        <h5 class="mb-0 fw-bold" style="color: var(--primary-color);">📋 Registrar Asistencia</h5>
+        <small class="text-muted">Marca la asistencia de los residentes inscritos a las diferentes jornadas</small>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr class="table-light text-secondary">
+                    <th class="ps-4">Residente</th>
+                    <th>Jornada</th>
+                    <th>Horario</th>
+                    <th>Barrio</th>
+                    <th class="pe-4 text-center">¿Asistió?</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inscripcion in inscripciones %}
+                <tr>
+                    <td class="ps-4">
+                        <div class="fw-bold text-dark">{{ inscripcion.residente.first_name }} {{ inscripcion.residente.last_name }}</div>
+                        <small class="text-muted">@{{ inscripcion.residente.username }}</small>
+                    </td>
+                    <td>
+                        <span class="fw-semibold text-primary">{{ inscripcion.jornada.nombre }}</span>
+                    </td>
+                    <td>
+                        <small class="fw-semibold">{{ inscripcion.jornada.hora_inicio|time:"H:i" }} - {{ inscripcion.jornada.hora_fin|time:"H:i" }}</small>
+                    </td>
+                    <td>
+                        <span class="badge bg-light text-dark">{{ inscripcion.jornada.barrio }}</span>
+                    </td>
+                    <td class="pe-4 text-center">
+                        <div class="form-check form-switch d-inline-block">
+                            <input class="form-check-input attendance-toggle shadow-sm" type="checkbox" style="width: 48px; height: 24px; cursor: pointer;" data-id="{{ inscripcion.id }}" {% if inscripcion.asistencia %}checked{% endif %}>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-4 text-muted">No hay inscripciones registradas para tomar asistencia.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    (function() {
+        document.querySelectorAll('.attendance-toggle').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                var inscripcionId = this.getAttribute('data-id');
+                var isChecked = this.checked;
+                
+                var formData = new FormData();
+                formData.append('inscripcion_id', inscripcionId);
+                formData.append('asistencia', isChecked);
+                // Obtener el csrf token de la cookie
+                var csrfToken = '';
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, 15) === 'csrftoken=') {
+                        csrfToken = cookie.substring(15);
+                        break;
+                    }
+                }
+                formData.append('csrfmiddlewaretoken', csrfToken);
+                
+                fetch("{% url 'registrar_asistencia' %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.html) {
+                        var tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = data.html;
+                        document.body.appendChild(tempDiv);
+                        var scripts = tempDiv.getElementsByTagName('script');
+                        for (var i = 0; i < scripts.length; i++) {
+                            eval(scripts[i].innerText);
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    })();
+</script>
