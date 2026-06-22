@@ -1,0 +1,17 @@
+<div class="card shadow-sm">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">Confirmar Eliminación</h5>
+    </div>
+    <div class="card-body">
+        <p class="mb-3">¿Está seguro de eliminar la jornada <strong>{{ object.nombre }}</strong>?</p>
+        <p class="text-muted small">Esta acción no se puede deshacer.</p>
+        
+        <div class="d-flex gap-2 mt-4">
+            <form method="post" class="ajax-delete-form" action="{% url 'jornada_delete' object.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+            </form>
+            <button type="button" class="btn btn-secondary load-spa" data-url="{% url 'jornada_list' %}" data-target="#spa-content">Cancelar</button>
+        </div>
+    </div>
+</div>

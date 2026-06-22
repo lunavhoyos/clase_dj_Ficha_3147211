@@ -1,0 +1,80 @@
+<!-- Dashboard Panel -->
+<div class="row g-4 mb-4">
+    <!-- Residentes Totales -->
+    <div class="col-md-4 col-sm-6">
+        <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100" style="background: linear-gradient(135deg, #eef2f3, #ffe9ec); transition: transform 0.2s;">
+            <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm mb-3" style="width: 60px; height: 60px;">
+                <span style="font-size: 28px;">👥</span>
+            </div>
+            <h3 class="fw-bold mb-1" style="color: var(--primary-color);">{{ total_residentes }}</h3>
+            <span class="text-muted fw-semibold">Residentes Registrados</span>
+        </div>
+    </div>
+    
+    <!-- Jornadas Totales -->
+    <div class="col-md-4 col-sm-6">
+        <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100" style="background: linear-gradient(135deg, #eef2f3, #e8f5e9); transition: transform 0.2s;">
+            <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm mb-3" style="width: 60px; height: 60px;">
+                <span style="font-size: 28px;">📅</span>
+            </div>
+            <h3 class="fw-bold mb-1" style="color: #2e7d32;">{{ total_jornadas }}</h3>
+            <span class="text-muted fw-semibold">Jornadas Totales</span>
+        </div>
+    </div>
+    
+    <!-- Porcentaje de Asistencia -->
+    <div class="col-md-4 col-sm-12">
+        <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100" style="background: linear-gradient(135deg, #eef2f3, #e3f2fd); transition: transform 0.2s;">
+            <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm mb-3" style="width: 60px; height: 60px;">
+                <span style="font-size: 28px;">📈</span>
+            </div>
+            <h3 class="fw-bold mb-1" style="color: #1565c0;">{{ porcentaje_asistencia }}%</h3>
+            <span class="text-muted fw-semibold">Tasa de Asistencia</span>
+        </div>
+    </div>
+</div>
+
+<!-- Inscripciones Recientes -->
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold" style="color: var(--primary-color);">📌 Inscripciones Recientes</h5>
+        <span class="badge bg-secondary rounded-pill">Total: {{ total_inscripciones }}</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr class="table-light text-secondary">
+                    <th class="ps-4">Usuario</th>
+                    <th>Jornada</th>
+                    <th>Fecha Inscripción</th>
+                    <th class="pe-4 text-center">Asistencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inscripcion in recent_inscripciones %}
+                <tr>
+                    <td class="ps-4">
+                        <div class="fw-bold text-dark">{{ inscripcion.residente.username }}</div>
+                        <small class="text-muted">{{ inscripcion.residente.email }}</small>
+                    </td>
+                    <td>
+                        <span class="fw-semibold text-primary">{{ inscripcion.jornada.nombre }}</span>
+                    </td>
+                    <td>{{ inscripcion.fecha_inscripcion|date:"d M Y, H:i" }}</td>
+                    <td class="pe-4 text-center">
+                        {% if inscripcion.asistencia %}
+                        <span class="badge bg-success rounded-pill px-3 py-2">✓ Asistió</span>
+                        {% else %}
+                        <span class="badge bg-warning text-dark rounded-pill px-3 py-2">⏳ Pendiente</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center py-4 text-muted">No hay inscripciones registradas todavía.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

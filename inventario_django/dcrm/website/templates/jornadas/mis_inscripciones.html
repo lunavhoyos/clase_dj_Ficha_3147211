@@ -1,0 +1,47 @@
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-header bg-white border-0 py-3">
+        <h5 class="mb-0 fw-bold" style="color: var(--primary-color);">💖 Mis Inscripciones</h5>
+        <small class="text-muted">Jornadas comunitarias a las que te has postulado</small>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr class="table-light text-secondary">
+                    <th class="ps-4">Jornada</th>
+                    <th>Horario</th>
+                    <th>Barrio</th>
+                    <th>Fecha Registro</th>
+                    <th class="pe-4 text-center">Estado de Asistencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inscripcion in inscripciones %}
+                <tr>
+                    <td class="ps-4">
+                        <span class="fw-bold text-dark">{{ inscripcion.jornada.nombre }}</span>
+                    </td>
+                    <td>
+                        <span class="fw-semibold text-secondary">{{ inscripcion.jornada.hora_inicio|time:"H:i" }} - {{ inscripcion.jornada.hora_fin|time:"H:i" }}</span>
+                    </td>
+                    <td>
+                        <span class="badge bg-light text-dark">{{ inscripcion.jornada.barrio }}</span>
+                    </td>
+                    <td>{{ inscripcion.fecha_inscripcion|date:"d M Y, H:i" }}</td>
+                    <td class="pe-4 text-center">
+                        {% if inscripcion.asistencia %}
+                        <span class="badge bg-success-subtle text-success border border-success rounded-pill px-3 py-2">✓ Asistencia Confirmada</span>
+                        {% else %}
+                        <span class="badge bg-warning-subtle text-warning border border-warning rounded-pill px-3 py-2">⏳ Pendiente / Programado</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-4 text-muted">Aún no te has inscrito en ninguna jornada.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

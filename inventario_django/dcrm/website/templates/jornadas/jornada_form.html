@@ -1,0 +1,62 @@
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h5 class="mb-0">{% if object %}Editar Jornada{% else %}Crear Jornada{% endif %}</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" class="ajax-form" data-success-message="{% if object %}Jornada actualizada{% else %}Jornada creada{% endif %}">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre del turno</label>
+                    {{ form.nombre }}
+                    {% if form.nombre.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.nombre.errors.as_text }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-3">
+                    <label for="{{ form.hora_inicio.id_for_label }}" class="form-label">Hora inicio</label>
+                    {{ form.hora_inicio }}
+                    {% if form.hora_inicio.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.hora_inicio.errors.as_text }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-3">
+                    <label for="{{ form.hora_fin.id_for_label }}" class="form-label">Hora fin</label>
+                    {{ form.hora_fin }}
+                    {% if form.hora_fin.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.hora_fin.errors.as_text }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-12">
+                    <label for="{{ form.dias_trabajo.id_for_label }}" class="form-label">Días de trabajo</label>
+                    {{ form.dias_trabajo }}
+                    <small class="text-muted">Formato: L-M-M-V-F (Lunes a Viernes)</small>
+                    {% if form.dias_trabajo.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.dias_trabajo.errors.as_text }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        {{ form.activo }}
+                        <label class="form-check-label" for="{{ form.activo.id_for_label }}">
+                            Jornada activa
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">{% if object %}Actualizar{% else %}Crear{% endif %}</button>
+                <button type="button" class="btn btn-secondary load-spa" data-url="{% url 'jornada_list' %}" data-target="#spa-content">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
