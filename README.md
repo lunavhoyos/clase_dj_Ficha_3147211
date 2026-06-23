@@ -4,7 +4,7 @@ Proyecto educativo desarrollado con Django, Bootstrap y tecnologías web moderna
 
 ## 📋 Descripción
 
-Este proyecto es una aplicación web construida con **Django** como framework backend, **Bootstrap** para el diseño responsivo, y tecnologías web estándar (HTML, CSS, JavaScript) para el frontend. Está diseñado como material de estudio para la ficha 3147211.
+Este proyecto es una aplicación web construida con **Django** como framework backend, **Bootstrap** para el diseño responsivo, y tecnologías web estándar (HTML, CSS, JavaScript) para el frontend. [...]
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -116,6 +116,29 @@ Este proyecto está diseñado para enseñar y practicar:
 - ✅ Uso de formularios Django
 - ✅ Autenticación y autorización básica
 - ✅ Buenas prácticas en desarrollo web
+
+## 🧩 Patrones de diseño
+
+El proyecto aplica varios patrones de diseño y buenas prácticas que ayudan a la organización y mantenibilidad del código. A continuación un resumen con referencias a los archivos donde se aplican:
+
+- Arquitectura Modelo–Plantilla–Vista (MTV): organización estándar de Django (ver `inventario_django/dcrm/dcrm/settings.py` y la app `website`).
+- Active Record: los modelos de Django implementan entidades y lógica asociada (ver `inventario_django/dcrm/website/models.py`: clases `Jornada`, `Registro`, `Inscripcion`).
+- Class-based Views / Template Method: uso de vistas basadas en clases que extienden y sobreescriben métodos (ver `inventario_django/dcrm/website/views.py`: `JornadaListView`, `JornadaCreateView`, `JornadaUpdateView`).
+- Mixin pattern (composición de comportamiento): `OrgAdminRequiredMixin` y uso de `LoginRequiredMixin`/`UserPassesTestMixin` para control de acceso (`inventario_django/dcrm/website/views.py`).
+- Decorator pattern: decoradores como `@login_required` y `@method_decorator(ensure_csrf_cookie, name='dispatch')` para añadir comportamiento transversal.
+- Observer pattern (señales): archivo `inventario_django/dcrm/website/signals.py` preparado para señales (`post_save`, etc.).
+- Validator / Strategy: validadores personalizados para prevenir inyección SQL y encapsular reglas (ver `inventario_django/dcrm/website/models.py`).
+- Domain Model: reglas de negocio encapsuladas dentro de los modelos (`clean()`, propiedades como `cupo_disponible`, `porcentaje_inscripcion`).
+- Facade / Adaptador (implícito): vistas que unifican respuestas HTML y JSON para peticiones normales y AJAX (uso de `render_to_string` + `JsonResponse` en `views.py`).
+
+Evidencia (fragmentos relevantes):
+- `inventario_django/dcrm/website/models.py` — validadores y modelos con lógica: validator y clases `Jornada`, `Registro`, `Inscripcion`.
+- `inventario_django/dcrm/website/views.py` — mixins, CBV, manejo AJAX y control de acceso.
+- `inventario_django/dcrm/website/signals.py` — archivo de señales.
+- `inventario_django/dcrm/website/urls.py` — rutas y mapeo de vistas.
+- `inventario_django/dcrm/dcrm/settings.py` — configuración y apps instaladas.
+
+Si quieres que incluya ejemplos de código con números de línea directamente en el README o que amplíe la explicación para cada patrón, dime y lo agrego.
 
 ## 📝 Notas Importantes
 
